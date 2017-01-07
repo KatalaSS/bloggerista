@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Edit your account{% endblock %}
+
+
+{% block content %}
+
+<div class="container">
+    <div class="col-sm-4">
+        <h1>Edit your account</h1>
+        <form action="." method="post" enctype="multipart/form-data">
+            {{ user_form|crispy }}
+            {{ profile_form|crispy }}
+            {% csrf_token %}
+        <p><input class="btn btn-primary" type="submit" value="Save changes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a class="btn btn-primary" href="{% url 'password_change' %}">Change your password</a>
+        </p>
+        </form>
+
+        <br/>
+        <br/>
+        <br/>
+    </div>
+
+</div>
+{% endblock %}
+

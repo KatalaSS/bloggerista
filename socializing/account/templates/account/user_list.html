@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+
+{% block title %}All users | {{ block.super }}{% endblock %}
+
+
+{% block content %}
+
+<div class="container">
+    <h2>All Users</h2>
+    <hr>
+    {% for p in people|dictsort:"username" %}
+        <div class="col-sm-3">
+            <center>
+                {% if p.profile.photo %}
+                <p><img width="100" height="100" class="img-circle" src="{{ p.profile.photo.url }}" alt=""></p>
+                {% else %}
+                <p><img width="100" height="100" class="img-circle" src="{% static 'img/avatar2.jpg' %}" alt=""></p>
+                {% endif %}
+                <a href="{{ p.get_absolute_url }}" style="text-decoration:none;">{{ p }}</a>
+            </center>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

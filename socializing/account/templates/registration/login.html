@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block title %}Log In{% endblock %}
+
+
+{% block content %}
+
+{% block extra_css %}
+<style>
+   body {
+    background-image: url({% static 'img/social_media.jpg' %});
+       no-repeat center center fixed;
+       -webkit-background-size: cover-moz-background-size: cover;
+       -o-background-size: cover;
+       background-size: cover;
+   }
+</style>
+{% endblock %}
+<br/>
+<br/>
+<br/>
+
+
+<div class="container">
+    <div class="col-sm-4 col-sm-offset-8">
+        <div class="well">
+            <h1>Log In</h1>
+
+            {% if form.errors %}
+            <p>Your username and password didn't match. Please try again
+            </p>
+            {% else %}
+            <p>If you don't have an account please <a href="{% url 'register' %}">Sign Up</a></p>
+            {% endif %}
+
+            <div class="login-form">
+                <form action="{% url 'login' %}" method="POST">{% csrf_token %}
+                    {{ form|crispy }}
+                    <input type="hidden" name="next" value="{{ next }}" />
+                    <p><a href="{% url 'password_reset' %}">Forgotten your password?</a></p>
+                    <p><input class="btn btn-primary" type="submit" value="Log In"> </p>
+                </form>
+            </div>
+            <br/>
+            <br/>
+            <ul><b>Or you can </b></ul>
+            <br/>
+
+  <!--python-social-auth -->
+            <ul>
+                <a href="{% url 'social:begin' 'google-oauth2' %}"><img src="{% static 'img/google.png' %}"></a>
+            </ul>
+            <ul>
+                <a href="{% url 'social:begin' 'facebook'%}"><img src="{% static 'img/facebook.png' %}"></a>
+            </ul>
+            <ul>
+                <a href="{% url 'social:begin' 'twitter'%}"><img src="{% static 'img/twitter.png' %}"></a>
+            </ul>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+

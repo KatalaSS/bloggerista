@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}Bloggerista{% endblock %}
+{% block content %}
+
+<br/>
+<br/>
+<br/>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-8 col-sm-offset-2">
+            {% if posts %}
+            <div class="thumbnail">
+                {% for post in posts %}
+                {% if post.profile.photo %}
+                <img width="50" height="50" class="img-circle" style="float: left;" src="{{ post.profile.photo.url }}" alt="">
+                {% else %}
+                <img width="50" height="50" class="img-circle" style="float: left;" src="{% static 'img/avatar2.jpg' %}" alt="">
+                {% endif %}
+
+                <a href="{{ user.get_absolute_url }}" style="text-decoration:none;"><h4>{{ post.author }}</h4></a>
+                <p> {{ post.created|timesince }} ago</p>
+                <a href="{{ post.get_absolute_url }}" style="text-decoration:none; color:black"><h2>{{ post.title }}</h2></a>
+                {% if post.image %}
+                <a href="{{ post.get_absolute_url }}"><img src="{{ post.image.url }}" class="img-responsive"></a>
+                {% endif %}
+
+                <h4 style="font-size:20px; font-family: Times New Roman, Times, serif">{{ post.content|linebreaks|truncatechars:120 }}<br/></h4>
+                {% endfor %}
+            </div>
+            <br>
+            {% else %}
+            <h2>Nothing was found</h2>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
+

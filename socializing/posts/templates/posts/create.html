@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Write a story{% endblock %}
+
+
+{% block content %}
+<br/>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-8 col-sm-offset-2">
+            <h2>Write your story</h2>
+            <br/>
+            <form  method="post" enctype="multipart/form-data">{% csrf_token %}
+                {{ form|crispy }}
+                <p><input class="btn btn-primary" type="submit" value="Publish"></p>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+

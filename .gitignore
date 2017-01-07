@@ -1,0 +1,16 @@
+
+socializing/socializing/settings/password.py
+
+.idea
+ENV/
+webfaction/httpd.conf
+__pycache__/
+*.pyc
+migrations/
+
+media/
+static/
+
+
+
+

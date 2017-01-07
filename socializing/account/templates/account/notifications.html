@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+
+{% block title %}Notifications{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>What's happening</h2>
+    <hr>
+    <ul id="notifications">
+    {% for action in actions %}
+        {% if action.user.profile.photo %}
+            <li><img width="60" height="60" class="img-circle" src="{{ action.user.profile.photo.url }}" alt=""></li>
+        {% else %}
+            <li><img width="60" height="60" class="img-circle" src="{% static 'img/avatar2.jpg' %}" alt=""></li>
+        {% endif %}
+        <li><a href="{{ action.user.get_absolute_url }}" style="text-decoration:none;"><h4><b>{{ action.user }}</b></h4></a></li>
+        <li><p>{{ action.verb }}</p></li>
+        {% if action.target %}
+            {% if action.target.image %}
+        <li><ul>
+            <center>
+                <img width="30" height="30" class="img-responsive" src="{{ action.target.image.url }}" alt="">
+                <a href="{{ action.target.get_absolute_url }}" style="text-decoration:none;"><b>{{ action.target }}</b></a>
+            </center>
+        </ul></li>
+        {% else %}
+        <li><a href="{{ action.target.get_absolute_url }}" style="text-decoration:none;"><b>{{ action.target }}</b></a></li>
+        {% endif %}
+        {% endif %}
+        &ensp<li><p>({{ action.created|timesince }} ago)</p></li>
+        <br/>
+        <br/>
+        {% endfor %}
+    </ul>
+</div>
+
+{% endblock %}
+

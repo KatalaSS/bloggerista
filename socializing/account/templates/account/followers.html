@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+
+{% block title %}Followed by | {{ block.super }}{% endblock %}
+
+
+{% block content %}
+
+
+<div class="container">
+    <div class="col-sm-6 col-sm-offset-3">
+        {% if followers.followed_by.all %}
+        <h2>Followed by</h2>
+        <hr>
+        <ul id="notifications">
+            {% for a in followers.followed_by.all %}
+            {% if a.photo %}
+            <li><img width="50" height="50" class="img-circle" src="{{ a.photo.url }}" alt=""></li>
+            {% else %}
+            <li><img width="50" height="50" class="img-circle" src="{% static 'img/avatar2.jpg' %}" alt=""></li>
+            {% endif %}
+            <li><a href="{{ a.user.get_absolute_url }}" style="text-decoration:none;"><h4><b>{{ a.user }}</b></h4></a></li>
+            <br/>
+            <br/>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <br/>
+        <br/>
+        <h1>You have no followers</h1>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+

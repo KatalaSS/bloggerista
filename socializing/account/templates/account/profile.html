@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+
+{% block title %}{{ user2.username }}{% endblock %}
+
+
+{% block content %}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4">
+            <h3>{{ user2 }}
+                {% if user2 != request.user %}
+                <a class="btn btn-primary" style="float: right;" href="{% url 'follow' author=user2.username %}">
+                {% if following %}Unfollow{% else %}Follow{% endif %}
+                </a>
+                {% endif %}
+            </h3>
+            <a href="{% url 'followers' author=user2.username %}" style="text-decoration:none;" ><p>Followers: {{ user2.followed_by.all.count }}</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="{% url 'following' author=user2.username %}" style="text-decoration:none;" >Following: {{ user2.profile.get_following.count }}</p></a>
+
+            {% if user2.profile.photo %}
+            <img width="200" height="200" class="img-circle" src="{{ user2.profile.photo.url }}" alt="">
+            {% else %}
+            <img width="200" height="200" class="img-circle" src="{% static 'img/avatar2.jpg' %}" alt="">
+            {% endif %}
+            <br/>
+            <br/>
+            <p><b>{{ user2.first_name }} {{ user2.last_name }}</b></p>
+            {% if user2.profile.date_of_birth %}
+            <p>Born: <b>{{ user2.profile.date_of_birth }}</b></p>
+            {% endif %}
+            {% if user2.profile.email %}
+            <p>Email: <b>{{ user2.profile.email }}</b></p>
+            {% endif %}
+
+            {% if user2.profile.city %}
+            <p>City: <b>{{ user2.profile.city }}</b></p>
+            {% endif %}
+
+            {% if user2.profile.country %}
+            <p>
+                County: <b>{{ user2.profile.country }}</b></p>
+            {% endif %}
+
+            {% if user2.profile.education %}
+            <p>Education: <b>{{ user2.profile.education }}</b></p>
+            {% endif %}
+            <br/>
+            <br/>
+            <br/>
+            {% if user2 == request.user %}
+            <a class="btn btn-primary" href="{% url 'edit' %}">Edit my profile <span></span></a>
+            {% endif %}
+            <br/>
+            <br/>
+        </div>
+
+        <div class="col-sm-6 col-sm-offset-2">
+
+            <h2>{{ user2.username }}'s posts</h2>
+            {% if user_posts %}
+            {% for post in user_posts %}
+                <div class="thumbnail">
+                    {% if post.profile.photo %}
+                    <img width="50" height="50" class="img-circle" style="float: left;" src="{{ post.profile.photo.url }}" alt="">
+                    {% else %}
+                    <img width="50" height="50" class="img-circle" style="float: left;" src="{% static 'img/avatar2.jpg' %}" alt="">
+                    {% endif %}
+                    <h4>{{ post.author }}</h4>
+                    <p> {{ post.created|timesince }}</p>
+                    <a href="{{ post.get_absolute_url }}" style="text-decoration:none; color:black"><h2>{{ post.title }}</h2></a>
+                    {% if post.image %}
+                    <img src="{{ post.image.url }}" class="img-responsive">
+                    {% endif %}
+                    <p>{{ post.content|linebreaks|truncatechars:120 }}<br/></p>
+                </div>
+                <br>
+                <br>
+            {% endfor %}
+            {% else %}
+            <p>There are no posts yet</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
+
+
+
+
+

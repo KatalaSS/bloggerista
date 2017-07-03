@@ -23,3 +23,12 @@
 
 {% endblock %}
 
+{% block jquery %}
+if ($('input[type="file"]').length > 0) {
+    $('input[type="file"]').filestyle({
+        buttonText: "Choose photo",
+        input: false,
+        buttonBefore: true,
+});
+}
+{% endblock %}

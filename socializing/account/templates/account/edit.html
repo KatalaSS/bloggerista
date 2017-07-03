@@ -17,7 +17,6 @@
         <a class="btn btn-primary" href="{% url 'password_change' %}">Change your password</a>
         </p>
         </form>
-
         <br/>
         <br/>
         <br/>
@@ -26,3 +25,12 @@
 </div>
 {% endblock %}
 
+{% block jquery %}
+if ($('input[type="file"]').length > 0) {
+    $('input[type="file"]').filestyle({
+        buttonText: "Choose photo",
+        input: false,
+        <!--buttonBefore: true,-->
+    });
+}
+{% endblock %}

@@ -84,7 +84,3 @@ def search(request):
         )
         context = {'posts': qs}
         return render(request, 'posts/search.html', context)
-
-
-
-

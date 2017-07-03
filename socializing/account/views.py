@@ -1,27 +1,30 @@
+from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.models import User
 from .models import Profile
-from .forms import UserRegistrationForm, UserEditForm, ProfileEditForm
+from .forms import UserEditForm, ProfileEditForm, UserCreateForm
 from actions.utils import create_action
 from actions.models import Action
 from posts.models import Post
+from django.core.urlresolvers import reverse_lazy
 
 
 def register(request):
     if request.method == 'POST':
-        user_form = UserRegistrationForm(request.POST)
-        if user_form.is_valid():
-            new_user = user_form.save(commit=False)
-            new_user.set_password(user_form.cleaned_data['password'])
-            new_user.save()
-            create_action(new_user, 'has created an account')
-            return render(request, 'account/register_done.html', {'new_form': user_form})
+        form = UserCreateForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            user = authenticate(username=form.cleaned_data.get('username'),
+                                password=form.cleaned_data.get('password1'))
+            login(request, user)
+            return redirect(reverse_lazy('home'))
     else:
-        user_form = UserRegistrationForm()
-    return render(request, 'account/register.html', {'user_form': user_form})
+        form = UserCreateForm()
+
+    return render(request, 'registration/register.html', {'form': form})
 
 
 @login_required
@@ -58,8 +61,8 @@ def user_list(request):
 
 
 @login_required
-def notifications(request):
-    actions = Action.objects.exclude(user=request.user)
+def notifications(request, author):
+    actions = Action.objects.filter(user=request.user.profile.get_following)
     actions = actions[:10]
     return render(request, 'account/notifications.html', {'actions': actions})
 

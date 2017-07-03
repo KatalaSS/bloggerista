@@ -21,7 +21,7 @@
                 {% if post.image %}
                 <img class="img-responsive" src="{{ post.image.url }}" alt="">
                 {% endif %}
-                <h4 style="font-size:20px; font-family: Times New Roman, Times, serif">{{ post.content|linebreaks }}</h4>
+                <h4 style="font-size:20px; font-family: Times New Roman, Times, serif">{{ post.content|safe|linebreaks }}</h4>
                 <button class="btn btn-primary">
                     <div class="likes post-likes" data-post-id="{{ post.id }}">
                         <i class="fa fa-thumbs-up" aria-hidden="true"></i>

@@ -35,9 +35,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 SECRET_KEY = secret_key
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['bloggerista.tk', 'www.bloggerista.tk']
 
 
 # Application definition
@@ -49,9 +49,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # created apps
     'account',
     'actions',
     'posts',
+    # 3-rd party libraries
     'crispy_forms',
     'el_pagination',
     'nocaptcha_recaptcha',
@@ -69,7 +71,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    #'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
+    # social django middleware
     'social_django.middleware.SocialAuthExceptionMiddleware',
 
 ]
@@ -89,9 +91,9 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
 
-                #'social.apps.django_app.context_processors.backends',
+                # social django context processors
                 'social_django.context_processors.backends',
-                #'social_django.django_app.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -155,13 +157,13 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static_storage")]
-STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static")
+STATIC_ROOT = "/webapps/bloggerista_static_root/"
 
 # MEDIA_URL = '/media/'
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media")
+MEDIA_ROOT = "/webapps/bloggerista_media_root/"
 
 
 LOGIN_REDIRECT_URL = reverse_lazy('home')
@@ -169,10 +171,11 @@ LOGIN_URL = reverse_lazy('login')
 LOGOUT_URL = reverse_lazy('logout')
 
 AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
     'social_core.backends.google.GoogleOAuth2',
-    'social_core.backends.facebook.Facebook2OAuth2',
     'social_core.backends.twitter.TwitterOAuth',
+    'social_core.backends.facebook.FacebookOAuth2',
+
+    'django.contrib.auth.backends.ModelBackend',
 ]
 
 SOCIAL_AUTH_FACEBOOK_KEY = social_auth_facebook_key

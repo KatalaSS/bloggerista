@@ -75,7 +75,7 @@
                     {% if post.image %}
                     <img src="{{ post.image.url }}" class="img-responsive">
                     {% endif %}
-                    <p>{{ post.content|linebreaks|truncatechars:120 }}<br/></p>
+                    <p>{{ post.content|safe|linebreaks|truncatechars_html:120 }}<br/></p>
                 </div>
                 <br>
                 <br>

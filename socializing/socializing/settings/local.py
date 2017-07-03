@@ -50,15 +50,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # created apps
     'account',
     'actions',
     'posts',
+    # 3-rd party libraries
     'crispy_forms',
     'el_pagination',
     'nocaptcha_recaptcha',
     'social_django',
     'social.apps.django_app.default',
 ]
+
+REDACTOR_UPLOAD = 'redactor_uploads/'
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
@@ -70,8 +74,9 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    #'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
+    # social django middleware
     'social_django.middleware.SocialAuthExceptionMiddleware',
+
 
 ]
 
@@ -90,9 +95,9 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
 
-                #'social.apps.django_app.context_processors.backends',
+                # social django context processors
                 'social_django.context_processors.backends',
-                #'social_django.django_app.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -172,10 +177,11 @@ LOGOUT_URL = reverse_lazy('logout')
 
 # python social auth authentication backends
 AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
     'social_core.backends.google.GoogleOAuth2',
-    'social_core.backends.facebook.Facebook2OAuth2',
     'social_core.backends.twitter.TwitterOAuth',
+    'social_core.backends.facebook.FacebookOAuth2',
+
+    'django.contrib.auth.backends.ModelBackend',
 ]
 
 SOCIAL_AUTH_FACEBOOK_KEY = social_auth_facebook_key

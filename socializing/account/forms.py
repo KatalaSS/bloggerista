@@ -1,26 +1,26 @@
 from django import forms
-from django.forms import TextInput
 from django.contrib.auth.models import User
 from nocaptcha_recaptcha.fields import NoReCaptchaField
 from .models import Profile
-from django.forms.extras.widgets import SelectDateWidget
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.forms.widgets import PasswordInput, TextInput
 
 
-class UserRegistrationForm(forms.ModelForm):
-    password = forms.CharField(label='Password', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Repeat password', widget=forms.PasswordInput)
-    captcha = NoReCaptchaField()
+class CustomAuthenticationForm(AuthenticationForm):
+    username = forms.CharField(widget=TextInput(attrs={'class': 'span2', 'placeholder': 'username'}), label='')
+    password = forms.CharField(widget=PasswordInput(attrs={'class': 'span2', 'placeholder': 'password'}), label='')
+
+
+class UserCreateForm(UserCreationForm):
+    username = forms.CharField(widget=TextInput(attrs={'class': 'span2', 'placeholder': 'username'}), label='')
+    password1 = forms.CharField(widget=PasswordInput(attrs={'class': 'span2', 'placeholder': 'password'}), label='')
+    password2 = forms.CharField(widget=PasswordInput(attrs={'class': 'span2', 'placeholder': 'confirm your password'}),
+                                label='')
+    captcha = NoReCaptchaField(label='')
 
     class Meta:
         model = User
-        fields = ('username',)
-        #exclude = ['last_login', 'is_superuser', 'groups', 'user_permissions', 'last_name', 'date_joined', 'is_staff', 'is_active']
-
-    def clean_password2(self):
-        cd = self.cleaned_data
-        if cd['password'] != cd['password2']:
-            raise forms.ValidationError('Passwords don\'t match')
-        return cd['password2']
+        fields = ("username", "password1", "password2", "captcha")
 
 
 class UserEditForm(forms.ModelForm):
@@ -30,11 +30,8 @@ class UserEditForm(forms.ModelForm):
 
 
 class ProfileEditForm(forms.ModelForm):
-    # birthdate = forms.DateField(widget=SelectDateWidget(years=range(1920, 2021)))
 
     class Meta:
         model = Profile
         fields = ('date_of_birth', 'city', 'country', 'education', 'photo')
         widgets = {'date_of_birth': TextInput(attrs={'placeholder': "Year-Month-Day"})}
-
-

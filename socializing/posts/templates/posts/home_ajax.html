@@ -22,7 +22,8 @@
     <a href="{{ post.get_absolute_url }}"><img src="{{ post.image.url }}" class="img-responsive"></a>
     {% endif %}
 
-    <h4 style="font-size:20px; font-family: Times New Roman, Times, serif">{{ post.content|linebreaks|truncatechars:120 }}<br/></h4>
+    <h4 style="font-size:20px; font-family: Times New Roman, Times, serif">{{ post.content|safe|linebreaks|truncatechars_html:120 }}<br/></h4>
+
     <br/>
 </div>
 <br>

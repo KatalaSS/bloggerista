@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block title %}Create an account{% endblock %}
+
+{% block content %}
+
+{% block extra_css %}
+<style>
+    body {
+    background-image: url({% static 'img/social_media.jpg' %});
+       no-repeat center center fixed;
+       -webkit-background-size: cover-moz-background-size: cover;
+       -o-background-size: cover;
+       background-size: cover;
+   }
+</style>
+{% endblock %}
+
+<br/>
+
+<div class="container">
+    <div class="col-sm-4 col-sm-offset-8">
+        <div class="well">
+            <h1>Create an account</h1>
+            <p>Already have an account? Then please <a href="{% url 'login' %}">Sign In</a></p>
+            <hr/>
+            <form action="../account" method="post">
+                {{ form|crispy }}
+                {% csrf_token %}
+                <p><input class="btn btn-block btn-primary" type="submit" value="Sign Up"></p>
+            </form>
+            <br/>
+            <p style="text-align: center">Or you can </p>
+            <hr/>
+
+  <!--python-social-auth -->
+            <a class="btn btn-block btn-social btn-google" href="{% url 'social:begin' 'google-oauth2' %}">
+                <span class="fa fa-google"></span>Sign in with Google</a>
+
+            <a class="btn btn-block btn-social btn-facebook" href="{% url 'social:begin' 'facebook'%}">
+                <span class="fa fa-facebook"></span>Sign in with Facebook</a>
+
+            <a class="btn btn-block btn-social btn-twitter" href="{% url 'social:begin' 'twitter'%}">
+                <span class="fa fa-twitter"></span>Sign in with Twitter</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

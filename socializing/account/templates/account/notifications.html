@@ -4,6 +4,14 @@
 
 {% block title %}Notifications{% endblock %}
 
+
+
+<!--<style>-->
+<!--a.collapse {-->
+    <!--display: none;-->
+<!--}-->
+<!--</style>-->
+
 {% block content %}
 <div class="container">
     <h2>What's happening</h2>
@@ -29,12 +37,70 @@
         <li><a href="{{ action.target.get_absolute_url }}" style="text-decoration:none;"><b>{{ action.target }}</b></a></li>
         {% endif %}
         {% endif %}
-        &ensp<li><p>({{ action.created|timesince }} ago)</p></li>
+        <li><p>({{ action.created|timesince }} ago)</p></li>
         <br/>
         <br/>
         {% endfor %}
     </ul>
 </div>
 
+
+
+<!--<div>-->
+    <!--<a href="{% static 'img/foto01.jpg' %}" data-lightbox="image-1" data-title="">-->
+        <!--<img width="280" height="200" class="img-rounded" src="{% static 'img/foto01.jpg' %}" alt="">-->
+    <!--</a>-->
+    <!--<a class="collapse" href="{% static 'img/foto02.jpg' %}" data-lightbox="image-1" data-title="">-->
+        <!--<img width="280" height="200" class="img-rounded" src="{% static 'img/foto02.jpg' %}" alt="">-->
+    <!--</a>-->
+    <!--<a class="collapse" href="{% static 'img/foto03.jpg' %}" data-lightbox="image-1" data-title="">-->
+        <!--<img width="280" height="200" class="img-rounded" src="{% static 'img/foto03.jpg' %}" alt="">-->
+    <!--</a>-->
+    <!--<a class="collapse" href="{% static 'img/foto04.jpg' %}" data-lightbox="image-1" data-title="">-->
+        <!--<img width="280" height="200" class="img-rounded" src="{% static 'img/foto04.jpg' %}" alt="">-->
+    <!--</a>-->
+    <!--<a class="collapse" href="{% static 'img/foto05.jpg' %}" data-lightbox="image-1" data-title="">-->
+        <!--<img width="280" height="200" class="img-rounded" src="{% static 'img/foto05.jpg' %}" alt="">-->
+    <!--</a>-->
+
+<!--</div>-->
+
+
+
+
+<!--<div class="menu" style="display: none;">-->
+
+    <!--<a href="{% static 'img/foto01.jpg' %}" data-lightbox="image-1" data-title="">-->
+        <!--<img width="280" height="200" class="img-rounded" src="{% static 'img/foto01.jpg' %}" alt="">-->
+    <!--</a>-->
+    <!--<a  href="{% static 'img/foto02.jpg' %}" data-lightbox="image-1" data-title="">-->
+        <!--<img  width="280" height="200" class="img-rounded" src="{% static 'img/foto02.jpg' %}" alt="">-->
+    <!--</a>-->
+    <!--<a  href="{% static 'img/foto03.jpg' %}" data-lightbox="image-1" data-title="">-->
+        <!--<img  width="280" height="200" class="img-rounded" src="{% static 'img/foto03.jpg' %}" alt="">-->
+    <!--</a>-->
+    <!--</div>-->
+
+    <!--<button id="buton" class="btn btn-primary">Show it</button>-->
+
+<!--<br/>-->
+<!--<br/>-->
+<!--<br/>-->
+
+
 {% endblock %}
 
+
+<!--{% block jquery %}-->
+
+
+<!--$( "button" ).click(function() {-->
+  <!--$( ".menu" ).show( "slow" );-->
+<!--});-->
+
+<!--$( "button" ).click(function() {-->
+  <!--$( "#buton" ).hide();-->
+<!--});-->
+
+
+<!--{% endblock %}-->

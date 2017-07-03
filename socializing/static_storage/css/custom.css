@@ -21,6 +21,9 @@ p.content-font-style {
 
 }
 
+input[type="file"] {
+    display: none;
+}
 
 ul#notifications li {
     display: inline-block;
@@ -171,6 +174,3 @@ input.btn.btn-primary:hover{
 .close:hover{
     color: #fff;
 }
-
-
-

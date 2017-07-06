@@ -1,0 +1,6 @@
+Django==1.8.17
+django-crispy-forms==1.6.1
+django-nocaptcha-recaptcha==0.0.19
+psycopg2==2.6.1
+social-auth-app-django
+pip-tools

@@ -111,31 +111,16 @@
 </div>
 
 {% block js %}
-<!--Twitter-style Pagination from Django EL(Endless) Pagination( # min 10 per page )-->
+
 <script src="http://code.jquery.com/jquery-latest.js"></script>
-<script src="{% static 'el-pagination/js/el-pagination.js' %}"></script>
 <script src="{% static 'js/bootstrap-filestyle.min.js' %}"></script>
-<script>
-    $.endlessPaginate({
-        paginateOnScroll: true,
-        paginateOnScrollMargin: 20
-    });
-</script>
+
 {% endblock %}
 
 <script>
     $( document ).ready(function() {
         {% block jquery %}
-        /*  like counting  */
-        $('.post-likes').click(function() {
-            var id;
-            id = $(this).attr('data-post-id');
-            $.get('/like-blog/', {
-                post_id: id
-            }, function(data) {
-                $('.like_count_blog').html(data);
-            });
-        });
+
         {% endblock %}
     });
 </script>
@@ -151,7 +136,6 @@
 <script src="{% static 'js/ie10-viewport-bug-workaround.js' %}"></script>
 <!--&lt;!&ndash;Google recaptcha&ndash;&gt;-->
 <script src='https://www.google.com/recaptcha/api.js'></script>
-<script src="{% static 'js/lightbox.js' %}"></script>
 
 </body>
 </html>

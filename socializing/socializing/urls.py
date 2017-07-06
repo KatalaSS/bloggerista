@@ -22,7 +22,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include('posts.urls')),
     url(r'^account/', include('account.urls')),
-    url('social-auth/', include('social.apps.django_app.urls', namespace='social')),
+    url('', include('social_django.urls', namespace='social'))
 ]
 
 if settings.DEBUG:

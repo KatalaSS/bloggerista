@@ -55,10 +55,8 @@ INSTALLED_APPS = [
     'posts',
     # 3-rd party libraries
     'crispy_forms',
-    'el_pagination',
     'nocaptcha_recaptcha',
     'social_django',
-    'social.apps.django_app.default',
 ]
 
 MIDDLEWARE_CLASSES = [

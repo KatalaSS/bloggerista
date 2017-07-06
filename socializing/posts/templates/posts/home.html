@@ -1,31 +1,75 @@
 {% extends "base.html" %}
+{% load static %}
 {% load crispy_forms_tags %}
-{% load el_pagination_tags %}
-
 
 {% block title %}Bloggerista{% endblock %}
 
 
 {% block content %}
 <br/>
-
 <div class="container">
     <div class="row">
         <div class="col-sm-8 col-sm-offset-2">
             <br/>
             <br/>
+            {% if posts %}
+            {% for post in posts %}
+            <div class="thumbnail">
+                {% if post.profile.photo %}
+                <img width="50" height="50" class="img-circle" style="float: left;" src="{{ post.profile.photo.url }}" alt="">
+                {% else %}
+                <img width="50" height="50" class="img-circle" style="float: left;" src="{% static 'img/avatar2.jpg' %}" alt="">
+                {% endif %}
 
-            {% include page_template %}
+                <a href="{{ user.get_absolute_url }}" style="text-decoration:none;"><h4>{{ post.author }}</h4></a>
+                <p> {{ post.created|timesince }} ago</p>
+                <a href="{{ post.get_absolute_url }}" style="text-decoration:none; color:black"><h2>{{ post.title }}</h2></a>
+                {% if post.image %}
+                <a href="{{ post.get_absolute_url }}"><img src="{{ post.image.url }}" class="img-responsive"></a>
+                {% endif %}
+                <h4 style="font-size:20px; font-family: Times New Roman, Times, serif">{{ post.content|safe|linebreaks|truncatechars_html:120 }}<br/></h4>
+            </div>
+            <br>
+            {% endfor %}
 
+
+            {% else %}
+            <br/>
+            <br/>
+            <br/>
+            <div class="well" style="background-color:#fff;">
+                <h1>Wellcome to Bloggerista</h1>
+                <br/>
+                <h4>You can <a href="{% url 'create' %}" style="text-decoration:none; ">write a story</a> or go to
+                    <a href="{% url 'user_list' %}" style="text-decoration:none; ">users</a>
+                    to make new friends and read their stories</h4>
+                <h4>Please go to<a href="{% url 'user_profile'  author=user.username %}" style="text-decoration:none; "> your profile </a>to fill with your credentials.</h4>
+            </div>
+            {% endif %}
         </div>
     </div>
 </div>
 
+
+<div class="prev_next" style="text-align: center;">
+    <ul class="pagination">
+        {% if posts.has_previous %}
+        <li><a class="btn btn-primary" href="?page={{posts.previous_page_number}}">Prev</a></li>
+        {% endif %}
+
+        {% for pg in page_range %}
+        {% if people.number == pg %}
+        <li><a href="?page={{pg}}" class="btn btn-default">{{pg}}</a></li>
+        {% else %}
+        <li><a href="?page={{pg}}" class="btn">{{pg}}</a></li>
+        {% endif %}
+        {% endfor %}
+        {% if posts.has_next %}
+        <li><a class="btn btn-primary" href="?page={{posts.next_page_number}}">Next</a></li>
+        {% endif %}
+        <span class="clear_both"></span>
+    </ul>
+</div>
+<br/>
+
 {% endblock %}
-
-
-
-
-
-
-

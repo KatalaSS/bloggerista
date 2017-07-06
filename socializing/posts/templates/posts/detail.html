@@ -9,7 +9,7 @@
 
         <div class="col-lg-8">
             <div class="thumbnail">
-               {% if post.profile.photo %}
+                {% if post.profile.photo %}
                 <img width="50" height="50" class="img-circle" style="float: left;" src="{{ post.profile.photo.url }}" alt="">
                 {% else %}
                 <img width="50" height="50" class="img-circle" style="float: left;" src="{% static 'img/avatar2.jpg' %}" alt="">
@@ -17,43 +17,41 @@
                 <a href="{{ user.get_absolute_url }}" style="text-decoration:none;"><h4>{{ post.author }}</h4></a>
                 <p>{{ post.created|timesince }} ago</p>
                 <h2>{{ post.title }}</h2>
-
                 {% if post.image %}
                 <img class="img-responsive" src="{{ post.image.url }}" alt="">
                 {% endif %}
                 <h4 style="font-size:20px; font-family: Times New Roman, Times, serif">{{ post.content|safe|linebreaks }}</h4>
-                <button class="btn btn-primary">
-                    <div class="likes post-likes" data-post-id="{{ post.id }}">
-                        <i class="fa fa-thumbs-up" aria-hidden="true"></i>
-                        <div class="like_count_blog">{{ post.likes }} </div>
-                    </div>
-                </button>
-                <a class="btn btn-primary" style="float: right;" href="{% url 'home' %}">Go Back <span></span></a>
+                <div>
+                    {% if request.user in post.likes.all %}
+                    <a class="btn btn-primary" href="{{ post.get_like_url }}"><i class="fa fa-thumbs-down" aria-hidden="true"></i> {{ post.likes.count }}</a>
+                    {% else %}
+                    <a class="btn btn-primary" href="{{ post.get_like_url }}"><i class="fa fa-thumbs-up" aria-hidden="true"></i> {{ post.likes.count }}</a>
+                    {% endif %}
+                    <a class="btn btn-primary" style="float: right;" href="{% url 'home' %}">Go Back <span></span></a>
+                </div>
             </div>
-
-
             <div id="disqus_thread"></div>
-                <script>
-                /**
-                * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-                * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
-                */
-                /*
-                var disqus_config = function () {
-                this.page.url = PAGE_URL; // Replace PAGE_URL with your page's canonical URL variable
-                this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-                };
-                */
-                (function() { // DON'T EDIT BELOW THIS LINE
-                var d = document, s = d.createElement('script');
+            <script>
+            /**
+            * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+            * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+            */
+            /*
+            var disqus_config = function () {
+            this.page.url = PAGE_URL; // Replace PAGE_URL with your page's canonical URL variable
+            this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+            };
+            */
+            (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document, s = d.createElement('script');
 
-                s.src = '//myfirstproject1234.disqus.com/embed.js';
+            s.src = '//myfirstproject1234.disqus.com/embed.js';
 
-                s.setAttribute('data-timestamp', +new Date());
-                (d.head || d.body).appendChild(s);
-                })();
-                </script>
-                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+            })();
+            </script>
+            <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
         </div>
     </div>
 </div>

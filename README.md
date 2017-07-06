@@ -1,7 +1,7 @@
 # Bloggerista
 Bloggerista is a blogging social network build with Python and Django Framework.
 
-The project has a blogging app that includes infinite scrolling, notifications, following friends, likes, authenticating with Google, Facebook and Twitter.
+The project has a blogging app that includes notifications, following friends, likes, authenticating with Google, Facebook and Twitter.
 
 
 

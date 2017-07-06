@@ -5,13 +5,6 @@
 {% block title %}Notifications{% endblock %}
 
 
-
-<!--<style>-->
-<!--a.collapse {-->
-    <!--display: none;-->
-<!--}-->
-<!--</style>-->
-
 {% block content %}
 <div class="container">
     <h2>What's happening</h2>
@@ -43,64 +36,25 @@
         {% endfor %}
     </ul>
 </div>
+<div class="prev_next" style="text-align: center;">
+    <ul class="pagination">
+        {% if actions.has_previous %}
+        <li><a class="btn btn-primary" href="?page={{actions.previous_page_number}}">Prev</a></li>
+        {% endif %}
 
-
-
-<!--<div>-->
-    <!--<a href="{% static 'img/foto01.jpg' %}" data-lightbox="image-1" data-title="">-->
-        <!--<img width="280" height="200" class="img-rounded" src="{% static 'img/foto01.jpg' %}" alt="">-->
-    <!--</a>-->
-    <!--<a class="collapse" href="{% static 'img/foto02.jpg' %}" data-lightbox="image-1" data-title="">-->
-        <!--<img width="280" height="200" class="img-rounded" src="{% static 'img/foto02.jpg' %}" alt="">-->
-    <!--</a>-->
-    <!--<a class="collapse" href="{% static 'img/foto03.jpg' %}" data-lightbox="image-1" data-title="">-->
-        <!--<img width="280" height="200" class="img-rounded" src="{% static 'img/foto03.jpg' %}" alt="">-->
-    <!--</a>-->
-    <!--<a class="collapse" href="{% static 'img/foto04.jpg' %}" data-lightbox="image-1" data-title="">-->
-        <!--<img width="280" height="200" class="img-rounded" src="{% static 'img/foto04.jpg' %}" alt="">-->
-    <!--</a>-->
-    <!--<a class="collapse" href="{% static 'img/foto05.jpg' %}" data-lightbox="image-1" data-title="">-->
-        <!--<img width="280" height="200" class="img-rounded" src="{% static 'img/foto05.jpg' %}" alt="">-->
-    <!--</a>-->
-
-<!--</div>-->
-
-
-
-
-<!--<div class="menu" style="display: none;">-->
-
-    <!--<a href="{% static 'img/foto01.jpg' %}" data-lightbox="image-1" data-title="">-->
-        <!--<img width="280" height="200" class="img-rounded" src="{% static 'img/foto01.jpg' %}" alt="">-->
-    <!--</a>-->
-    <!--<a  href="{% static 'img/foto02.jpg' %}" data-lightbox="image-1" data-title="">-->
-        <!--<img  width="280" height="200" class="img-rounded" src="{% static 'img/foto02.jpg' %}" alt="">-->
-    <!--</a>-->
-    <!--<a  href="{% static 'img/foto03.jpg' %}" data-lightbox="image-1" data-title="">-->
-        <!--<img  width="280" height="200" class="img-rounded" src="{% static 'img/foto03.jpg' %}" alt="">-->
-    <!--</a>-->
-    <!--</div>-->
-
-    <!--<button id="buton" class="btn btn-primary">Show it</button>-->
-
-<!--<br/>-->
-<!--<br/>-->
-<!--<br/>-->
-
+        {% for pg in page_range %}
+        {% if actions.number == pg %}
+        <li><a href="?page={{pg}}" class="btn btn-default">{{pg}}</a></li>
+        {% else %}
+        <li><a href="?page={{pg}}" class="btn">{{pg}}</a></li>
+        {% endif %}
+        {% endfor %}
+        {% if actions.has_next %}
+        <li><a class="btn btn-primary" href="?page={{actions.next_page_number}}">Next</a></li>
+        {% endif %}
+        <span class="clear_both"></span>
+    </ul>
+</div>
+<br/>
 
 {% endblock %}
-
-
-<!--{% block jquery %}-->
-
-
-<!--$( "button" ).click(function() {-->
-  <!--$( ".menu" ).show( "slow" );-->
-<!--});-->
-
-<!--$( "button" ).click(function() {-->
-  <!--$( "#buton" ).hide();-->
-<!--});-->
-
-
-<!--{% endblock %}-->

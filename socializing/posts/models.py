@@ -15,7 +15,8 @@ class Post(models.Model):
     created = models.DateTimeField(auto_now_add=True, db_index=True)
     modified = models.DateTimeField(auto_now=True)
     slug = models.SlugField(unique=True)
-    likes = models.PositiveIntegerField(default=0)
+    # likes = models.PositiveIntegerField(default=0)
+    likes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='post_likes')
 
     @property
     def total_likes(self):
@@ -29,6 +30,9 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return reverse("detail", kwargs={"slug": self.slug})
+
+    def get_like_url(self):
+        return reverse("like-toggle", kwargs={"slug": self.slug})
 
     def _get_unique_slug(self):
         slug = slugify(self.title)

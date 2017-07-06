@@ -1,9 +1,10 @@
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import View
+from django.views.generic import View, RedirectView
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.models import User
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import Profile
 from .forms import UserEditForm, ProfileEditForm, UserCreateForm
 from actions.utils import create_action
@@ -56,15 +57,50 @@ def user_profile(request, author=None):
 
 @login_required
 def user_list(request):
-    people = User.objects.all()
-    return render(request, 'account/user_list.html', {'people': people})
+    all_people = User.objects.all()
+    page = request.GET.get('page', 1)
+
+    paginator = Paginator(all_people, 12)
+    try:
+        people = paginator.page(page)
+    except PageNotAnInteger:
+        people = paginator.page(1)
+    except EmptyPage:
+        people = paginator.page(paginator.num_pages)
+
+    index = people.number - 1
+    max_index = len(paginator.page_range)
+    start_index = index - 3 if index >= 3 else 0
+    end_index = index + 3 if index <= max_index - 3 else max_index
+    page_range = paginator.page_range[start_index:end_index]
+
+    return render(request, 'account/user_list.html',
+                  {'people': people,
+                   "page_range": page_range})
 
 
 @login_required
 def notifications(request, author):
-    actions = Action.objects.filter(user=request.user.profile.get_following)
-    actions = actions[:10]
-    return render(request, 'account/notifications.html', {'actions': actions})
+    all_actions = Action.objects.filter(user=request.user.profile.get_following)
+    page = request.GET.get('page', 1)
+
+    paginator = Paginator(all_actions, 10)
+    try:
+        actions = paginator.page(page)
+    except PageNotAnInteger:
+        actions = paginator.page(1)
+    except EmptyPage:
+        actions = paginator.page(paginator.num_pages)
+
+    index = actions.number - 1
+    max_index = len(paginator.page_range)
+    start_index = index - 3 if index >= 3 else 0
+    end_index = index + 3 if index <= max_index - 3 else max_index
+    page_range = paginator.page_range[start_index:end_index]
+
+    return render(request, 'account/notifications.html',
+                  {'actions': actions,
+                   'page_range': page_range})
 
 
 class UserFollowView(View):

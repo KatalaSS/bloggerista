@@ -28,4 +28,24 @@
     {% endfor %}
 </div>
 
+<div class="prev_next" style="text-align: center;">
+    <ul class="pagination">
+        {% if people.has_previous %}
+        <li><a class="prev btn btn-primary" href="?page={{people.previous_page_number}}">Prev</a></li>
+        {% endif %}
+        {% for pg in page_range %}
+        {% if people.number == pg %}
+        <li><a href="?page={{pg}}" class="btn btn-default">{{pg}}</a></li>
+        {% else %}
+        <li><a href="?page={{pg}}" class="btn">{{pg}}</a></li>
+        {% endif %}
+        {% endfor %}
+        {% if people.has_next %}
+        <li><a class="next btn btn-primary" href="?page={{people.next_page_number}}">Next</a></li>
+        {% endif %}
+        <span class="clear_both"></span>
+    </ul>
+</div>
+<br/>
+
 {% endblock %}

@@ -19,10 +19,10 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+    url(r'^third_app_admin/', admin.site.urls),
     url(r'^', include('posts.urls')),
     url(r'^account/', include('account.urls')),
-    url('', include('social_django.urls', namespace='social'))
+    url(r'^oauth/', include('social_django.urls', namespace='social'))
 ]
 
 if settings.DEBUG:

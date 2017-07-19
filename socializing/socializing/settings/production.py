@@ -13,17 +13,17 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 import os
 from django.core.urlresolvers import reverse_lazy
 from .password import (secret_key,
-                       dbname,
-                       dbuser,
-                       dbpass_local,
+                       dbname_production,
+                       dbuser_production,
+                       dbpass_production,
                        social_auth_facebook_key,
                        social_auth_facebook_secret,
                        social_auth_twitter_key,
                        social_auth_twitter_secret,
                        social_auth_google_auth2_key,
                        social_auth_google_auth2_secret,
-                       no_recaptcha_site_key,
-                       no_recaptcha_secret_key)
+                       recaptcha_site_key,
+                       recaptcha_secret_key)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -35,9 +35,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 SECRET_KEY = secret_key
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['bloggerista.tk', 'www.bloggerista.tk']
+ALLOWED_HOSTS = ['bloggerista.ml', 'www.bloggerista.ml']
 
 
 # Application definition
@@ -49,14 +49,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # 3-rd party libraries
+    'social_django',
+    'crispy_forms',
+    'captcha',
     # created apps
     'account',
     'actions',
     'posts',
-    # 3-rd party libraries
-    'crispy_forms',
-    'nocaptcha_recaptcha',
-    'social_django',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -71,6 +71,7 @@ MIDDLEWARE_CLASSES = [
 
     # social django middleware
     'social_django.middleware.SocialAuthExceptionMiddleware',
+
 
 ]
 
@@ -105,11 +106,11 @@ WSGI_APPLICATION = 'socializing.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': dbname,
-        'USER': dbuser,
-        'PASSWORD': dbpass_local,
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': dbname_production,
+        'USER': dbuser_production,
+        'PASSWORD': dbpass_production,
+        'HOST': '',
+        'PORT': '',
     }
 }
 
@@ -148,25 +149,19 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 
-# STATIC_URL = '/static_storage/'
-# STATICFILES_DIRS = [os.path.join(BASE_DIR, "static_storage")]
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static_storage/')
-
-
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static_storage")]
-STATIC_ROOT = "/webapps/bloggerista_static_root/"
+STATIC_ROOT = "/home/dorianhoxha/webapps/bloggerista_static/"
 
-# MEDIA_URL = '/media/'
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = "/webapps/bloggerista_media_root/"
+MEDIA_ROOT = "/home/dorianhoxha/webapps/bloggerista_media/"
 
 
-LOGIN_REDIRECT_URL = reverse_lazy('home')
-LOGIN_URL = reverse_lazy('login')
-LOGOUT_URL = reverse_lazy('logout')
+LOGIN_REDIRECT_URL = 'home'
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
+
 
 AUTHENTICATION_BACKENDS = [
     'social_core.backends.google.GoogleOAuth2',
@@ -179,6 +174,14 @@ AUTHENTICATION_BACKENDS = [
 SOCIAL_AUTH_FACEBOOK_KEY = social_auth_facebook_key
 SOCIAL_AUTH_FACEBOOK_SECRET = social_auth_facebook_secret
 
+
+# Get email from Facebook signed in users
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
+    'fields': 'id,name,email',
+}
+
+
 SOCIAL_AUTH_TWITTER_KEY = social_auth_twitter_key
 SOCIAL_AUTH_TWITTER_SECRET = social_auth_twitter_secret
 
@@ -186,8 +189,24 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = social_auth_google_auth2_key
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = social_auth_google_auth2_secret
 
 
-NORECAPTCHA_SITE_KEY = no_recaptcha_site_key
-NORECAPTCHA_SECRET_KEY = no_recaptcha_secret_key
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.auth_allowed',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.user.get_username',
+    'social_core.pipeline.mail.mail_validation',
+    'social_core.pipeline.social_auth.associate_by_email',
+    'social_core.pipeline.user.create_user',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
+)
+
+
+RECAPTCHA_PUBLIC_KEY = recaptcha_site_key
+RECAPTCHA_PRIVATE_KEY = recaptcha_secret_key
+NOCAPTCHA = True
 
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
@@ -197,6 +216,3 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 ABSOLUTE_URL_OVERRIDES = {
     'auth.user': lambda u: reverse_lazy('user_profile', args=[u.username])
 }
-
-
-

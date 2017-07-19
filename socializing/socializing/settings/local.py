@@ -22,8 +22,8 @@ from .password import (secret_key,
                        social_auth_twitter_secret,
                        social_auth_google_auth2_key,
                        social_auth_google_auth2_secret,
-                       no_recaptcha_site_key,
-                       no_recaptcha_secret_key)
+                       recaptcha_site_key,
+                       recaptcha_secret_key)
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -56,7 +56,7 @@ INSTALLED_APPS = [
     'posts',
     # 3-rd party libraries
     'crispy_forms',
-    'nocaptcha_recaptcha',
+    'captcha',
     'social_django',
 ]
 
@@ -152,25 +152,18 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 
-# STATIC_URL = '/static_storage/'
-# STATICFILES_DIRS = [os.path.join(BASE_DIR, "static_storage")]
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static_storage/')
-
-
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static_storage")]
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static")
 
-# MEDIA_URL = '/media/'
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media")
 
 
-LOGIN_REDIRECT_URL = reverse_lazy('home')
-LOGIN_URL = reverse_lazy('login')
-LOGOUT_URL = reverse_lazy('logout')
+LOGIN_REDIRECT_URL = 'home'
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
 
 
 # python social auth authentication backends
@@ -192,8 +185,24 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = social_auth_google_auth2_key
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = social_auth_google_auth2_secret
 
 
-NORECAPTCHA_SITE_KEY = no_recaptcha_site_key
-NORECAPTCHA_SECRET_KEY = no_recaptcha_secret_key
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.auth_allowed',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.user.get_username',
+    'social_core.pipeline.mail.mail_validation',
+    'social_core.pipeline.social_auth.associate_by_email',
+    'social_core.pipeline.user.create_user',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
+)
+
+
+RECAPTCHA_PUBLIC_KEY = recaptcha_site_key
+RECAPTCHA_PRIVATE_KEY = recaptcha_secret_key
+NOCAPTCHA = True
 
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
@@ -203,6 +212,3 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 ABSOLUTE_URL_OVERRIDES = {
     'auth.user': lambda u: reverse_lazy('user_profile', args=[u.username])
 }
-
-
-

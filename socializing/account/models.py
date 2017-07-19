@@ -1,9 +1,12 @@
 from __future__ import unicode_literals
-from django.db import models
+
+from django.core.urlresolvers import reverse
 from django.conf import settings
-from django.dispatch import receiver
+from django.db import models
 from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.contrib.auth.models import User
+from django.utils.text import slugify
 
 
 class ProfileManager(models.Manager):
@@ -35,6 +38,14 @@ class ProfileManager(models.Manager):
         return False
 
 
+def image_upload_to(instance, filename):
+    name = instance.user
+    slug = slugify(name)
+    basename, file_extension = filename.split(".")
+    new_filename = "%s-%s.%s" % (slug, instance.id, file_extension)
+    return "users/%s/%s" % (slug, new_filename)
+
+
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     following = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='followed_by')
@@ -42,7 +53,7 @@ class Profile(models.Model):
     city = models.CharField(max_length=50, blank=True, null=True)
     country = models.CharField(max_length=50, blank=True, null=True)
     education = models.CharField(max_length=150, blank=True, null=True)
-    photo = models.ImageField(upload_to='profile photos/', blank=True, null=True)
+    photo = models.ImageField(upload_to=image_upload_to, blank=True, null=True)
 
     objects = ProfileManager()
 
@@ -59,8 +70,5 @@ class Profile(models.Model):
             Profile.objects.create(user=instance)
             instance.profile.save()
 
-
-
-
-
-
+    def get_absolute_url(self):
+        return reverse("user_profile", kwargs={"pk": self.pk})

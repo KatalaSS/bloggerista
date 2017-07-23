@@ -1,11 +1,11 @@
 from django.db import models
-from django.contrib.auth.models import User
-from django.contrib.contenttypes.models import ContentType
+from django.conf import settings
 from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 
 
 class Action(models.Model):
-    user = models.ForeignKey(User, related_name='actions', db_index=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='actions', db_index=True)
     verb = models.CharField(max_length=255)
     target_ct = models.ForeignKey(ContentType, blank=True, null=True, related_name='target_obj')
     target_id = models.PositiveIntegerField(null=True, blank=True, db_index=True)
@@ -14,4 +14,3 @@ class Action(models.Model):
 
     class Meta:
         ordering = ['-created']
-

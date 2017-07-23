@@ -1,12 +1,14 @@
 import datetime
 from django import forms
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.forms.extras import SelectDateWidget
 from django.forms.widgets import PasswordInput, TextInput
 
 from .models import Profile
 from captcha.fields import ReCaptchaField
+
+User = get_user_model()
 
 
 class CustomAuthenticationForm(AuthenticationForm):
@@ -23,7 +25,7 @@ class UserCreateForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ("username", "password1", "password2", "captcha")
+        fields = ("username", "password", "password2", "captcha")
 
 
 class UserEditForm(forms.ModelForm):

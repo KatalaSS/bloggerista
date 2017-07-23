@@ -1,6 +1,6 @@
 import datetime
-from django.utils import timezone
 from django.contrib.contenttypes.models import ContentType
+from django.utils import timezone
 from .models import Action
 
 
@@ -19,6 +19,3 @@ def create_action(user, verb, target=None):
         action.save()
         return True
     return False
-
-
-

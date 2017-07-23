@@ -61,7 +61,6 @@
                             <small style="font-size:11px; color:#aaa;"> {{ comment.created|timesince }} ago</small>
                         </h4>
                         {{ comment.content }}
-<!--style="float:right; color:#aaa;-->
                         {% if request.user == comment.user or request.user.is_superuser %}
                         <a class="del-comment"
                            href="{% url 'comment_delete' slug=post.slug pk=comment.pk %}">
@@ -101,4 +100,3 @@
 </div>
 
 {% endblock %}
-

@@ -15,6 +15,7 @@ def home(request):
     all_posts = Post.objects.filter(
         Q(author__in=request.user.profile.following.all()) |
         Q(author__id=request.user.id))
+
     page = request.GET.get('page', 1)
 
     paginator = Paginator(all_posts, 10)
@@ -38,7 +39,7 @@ def home(request):
     return render(request, template, context)
 
 
-def create(request):
+def create_post(request):
     form = PostForm(request.POST or None, request.FILES or None)
     if form.is_valid():
         instance = form.save(commit=False)

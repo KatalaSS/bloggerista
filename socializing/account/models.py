@@ -1,11 +1,10 @@
 from __future__ import unicode_literals
 
-from django.core.urlresolvers import reverse
 from django.conf import settings
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.contrib.auth.models import User
 from django.utils.text import slugify
 
 
@@ -64,7 +63,7 @@ class Profile(models.Model):
         users = self.following.all()
         return users.exclude(username=self.user.username)
 
-    @receiver(post_save, sender=User)
+    @receiver(post_save, sender=settings.AUTH_USER_MODEL)
     def create_or_update_user_profile(sender, instance, created, *args, **kwargs):
         if created:
             Profile.objects.create(user=instance)

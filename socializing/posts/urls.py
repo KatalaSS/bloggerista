@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from . views import (home,
-                     create,
+                     create_post,
                      post_detail,
                      post_update,
                      post_delete,
@@ -13,7 +13,7 @@ from . views import (home,
 urlpatterns = [
     url(r'^$', home, name='home'),
     url(r'^search/$', search, name='search'),
-    url(r'^create/$', create, name='create'),
+    url(r'^create/$', create_post, name='create'),
     url(r'^(?P<slug>[-\w]+)/$', post_detail, name='detail'),
     url(r'^(?P<slug>[-\w]+)/update/$', post_update, name='update'),
     url(r'^(?P<slug>[-\w]+)/delete/$', post_delete, name='delete'),

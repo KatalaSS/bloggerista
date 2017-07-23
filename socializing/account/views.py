@@ -1,16 +1,17 @@
-from django.contrib.auth import authenticate, login
-from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import View, RedirectView
+from django.contrib.auth import authenticate, login, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.contrib.auth.models import User
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from .models import Profile
+from django.core.urlresolvers import reverse_lazy
+from django.shortcuts import render, redirect, get_object_or_404
+
 from .forms import UserEditForm, ProfileEditForm, UserCreateForm
+from .models import Profile
 from actions.utils import create_action
 from actions.models import Action
 from posts.models import Post
-from django.core.urlresolvers import reverse_lazy
+
+User = get_user_model()
 
 
 def register(request):
@@ -19,7 +20,7 @@ def register(request):
         if form.is_valid():
             user = form.save()
             user = authenticate(username=form.cleaned_data.get('username'),
-                                password=form.cleaned_data.get('password1'))
+                                password=form.cleaned_data.get('password'))
             login(request, user)
             return redirect(reverse_lazy('home'))
     else:
@@ -29,7 +30,7 @@ def register(request):
 
 
 @login_required
-def edit(request):
+def edit_profile(request, author=None):
     if request.method == 'POST':
         user_form = UserEditForm(instance=request.user, data=request.POST)
         profile_form = ProfileEditForm(instance=request.user.profile, data=request.POST, files=request.FILES)
@@ -38,21 +39,24 @@ def edit(request):
             profile_form.save()
             messages.success(request, 'Profile updated successfully')
         else:
-            messages.error(request, 'Error updating your profile')
-        return redirect('user_profile', request.user)
+            messages.success(request, '%s is already taken. Pick another username' % request.user)
+        return redirect('edit_profile', author=request.user)
     else:
         user_form = UserEditForm(instance=request.user)
         profile_form = ProfileEditForm(instance=request.user.profile)
-    return render(request, 'account/edit.html', {'user_form': user_form, 'profile_form': profile_form})
+    return render(request, 'account/edit_profile.html',
+                  {'user_form': user_form, 'profile_form': profile_form})
 
 
 @login_required
 def user_profile(request, author=None):
-    user2 = get_object_or_404(User, username=author)
-    following = Profile.objects.is_following(request.user, user2)
+    instance = get_object_or_404(User, username=author)
+    following = Profile.objects.is_following(request.user, instance)
     user_posts = Post.objects.filter(author__username=author)
-    context = {'user2': user2, 'user_posts': user_posts, 'following': following}
-    return render(request, 'account/profile.html', context)
+    context = {'instance': instance,
+               'user_posts': user_posts,
+               'following': following}
+    return render(request, 'account/user_profile.html', context)
 
 
 @login_required
@@ -103,21 +107,21 @@ def notifications(request, author):
                    'page_range': page_range})
 
 
-class UserFollowView(View):
-
-    def get(self, request, author, *args, **kwargs):
-        toggle_user = get_object_or_404(User, username__iexact=author)
-        if request.user.is_authenticated():
-            is_following = Profile.objects.toggle_follow(request.user, toggle_user)
-            create_action(request.user, 'follows', toggle_user)
-        return redirect('user_profile', author=author)
+def user_follow_view(request, author=None):
+    toggle_user = get_object_or_404(User, username__iexact=author)
+    if request.user.is_authenticated():
+        is_following = Profile.objects.toggle_follow(request.user, toggle_user)
+        create_action(request.user, 'follows', toggle_user)
+    return redirect('user_profile', author=author)
 
 
 def following(request, author):
-    following = get_object_or_404(User, username=author)
-    return render(request, 'account/following.html', {'following': following})
+    user = get_object_or_404(User, username=author)
+    is_following = user.profile.get_following
+    return render(request, 'account/is_following.html', {'is_following': is_following})
 
 
 def followers(request, author):
-    followers = get_object_or_404(User, username=author)
+    user = get_object_or_404(User, username=author)
+    followers = user.followed_by.all
     return render(request, 'account/followers.html', {'followers': followers})

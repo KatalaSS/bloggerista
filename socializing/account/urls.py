@@ -1,5 +1,5 @@
-from django.conf.urls import url
 import views
+from django.conf.urls import url
 from .forms import CustomAuthenticationForm
 from django.contrib.auth.views import (password_reset_complete,
                                        password_reset_confirm,
@@ -28,11 +28,11 @@ urlpatterns = (
         {'template_name': 'registration/password_reset_confirm_.html'}, name='password_reset_confirm'),
     url(r'^password-reset/complete/$', password_reset_complete,
         {'template_name': 'registration/password_reset_done_.html'}, name='password_reset_complete'),
-    url(r'^edit/$', views.edit, name='edit'),
+    url(r'^profile/(?P<author>[-\w]+)/edit/$', views.edit_profile, name='edit_profile'),
     url(r'^people/$', views.user_list, name='user_list'),
     url(r'^profile/(?P<author>[-\w]+)/notifications/$', views.notifications, name='notifications'),
     url(r'^profile/(?P<author>[-\w]+)/$', views.user_profile, name='user_profile'),
-    url(r'^profile/(?P<author>[-\w]+)/follow/$', views.UserFollowView.as_view(), name='follow'),
+    url(r'^profile/(?P<author>[-\w]+)/follow/$', views.user_follow_view, name='follow'),
     url(r'^profile/(?P<author>[-\w]+)/following/$', views.following, name='following'),
     url(r'^profile/(?P<author>[-\w]+)/followers/$', views.followers, name='followers'),
 )

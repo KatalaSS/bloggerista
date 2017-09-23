@@ -25,7 +25,8 @@ class UserCreateForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ("username", "password", "password2", "captcha")
+        fields = ("username",)
+        # fields = "__all__"
 
 
 class UserEditForm(forms.ModelForm):
@@ -44,4 +45,4 @@ class ProfileEditForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ('date_of_birth', 'city', 'country', 'education', 'photo')
-        widgets = {'date_of_birth': TextInput(attrs={'placeholder': "Year-Month-Day"})}
+        # widgets = {'date_of_birth': TextInput(attrs={'placeholder': "Year-Month-Day"})}

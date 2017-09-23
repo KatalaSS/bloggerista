@@ -184,3 +184,7 @@ a.del-comment {
     float: right;
     color: #aaa;
 }
+
+.glyphicon {
+    line-height: unset;
+}

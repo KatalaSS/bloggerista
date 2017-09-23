@@ -1,16 +1,13 @@
 
 socializing/socializing/settings/password.py
-
+socializing/secrets.json
 .idea
 ENV/
 webfaction/httpd.conf
 __pycache__/
 *.pyc
+*.json
 migrations/
 
 media/
 static/
-
-
-
-

@@ -18,9 +18,9 @@ def register(request):
     if request.method == 'POST':
         form = UserCreateForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            user = authenticate(username=form.cleaned_data.get('username'),
-                                password=form.cleaned_data.get('password'))
+            form.save()
+            user = authenticate(username=request.POST['username'],
+                                password=request.POST['password1'])
             login(request, user)
             return redirect(reverse_lazy('home'))
     else:
@@ -38,9 +38,10 @@ def edit_profile(request, author=None):
             user_form.save()
             profile_form.save()
             messages.success(request, 'Profile updated successfully')
+            return redirect('user_profile', author=request.user)
         else:
             messages.success(request, '%s is already taken. Pick another username' % request.user)
-        return redirect('edit_profile', author=request.user)
+            return redirect('edit_profile', author=request.user)
     else:
         user_form = UserEditForm(instance=request.user)
         profile_form = ProfileEditForm(instance=request.user.profile)

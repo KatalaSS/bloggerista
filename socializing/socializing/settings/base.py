@@ -11,19 +11,23 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
 import os
+import json
+
+from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse_lazy
-from .password import (secret_key,
-                       dbname,
-                       dbuser,
-                       dbpass_local,
-                       social_auth_facebook_key,
-                       social_auth_facebook_secret,
-                       social_auth_twitter_key,
-                       social_auth_twitter_secret,
-                       social_auth_google_auth2_key,
-                       social_auth_google_auth2_secret,
-                       recaptcha_site_key,
-                       recaptcha_secret_key)
+
+
+with open(os.path.abspath("secrets.json")) as f:
+    secrets = json.loads(f.read())
+
+
+def get_secret(settings, secrets=secrets):
+    """Get the secret variable or return explicit exception."""
+    try:
+        return secrets[settings]
+    except KeyError:
+        error_msg = 'Set the {0} environment variable'.format(settings)
+    raise ImproperlyConfigured(error_msg)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -32,7 +36,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = secret_key
+SECRET_KEY = get_secret("secret_key")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -105,9 +109,9 @@ WSGI_APPLICATION = 'socializing.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': dbname,
-        'USER': dbuser,
-        'PASSWORD': dbpass_local,
+        'NAME': get_secret("dbname"),
+        'USER': get_secret("dbuser"),
+        'PASSWORD': get_secret("dbpass_local"),
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -170,14 +174,14 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
-SOCIAL_AUTH_FACEBOOK_KEY = social_auth_facebook_key
-SOCIAL_AUTH_FACEBOOK_SECRET = social_auth_facebook_secret
+SOCIAL_AUTH_FACEBOOK_KEY = get_secret("social_auth_facebook_key")
+SOCIAL_AUTH_FACEBOOK_SECRET = get_secret("social_auth_facebook_secret")
 
-SOCIAL_AUTH_TWITTER_KEY = social_auth_twitter_key
-SOCIAL_AUTH_TWITTER_SECRET = social_auth_twitter_secret
+SOCIAL_AUTH_TWITTER_KEY = get_secret("social_auth_twitter_key")
+SOCIAL_AUTH_TWITTER_SECRET = get_secret("social_auth_twitter_secret")
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = social_auth_google_auth2_key
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = social_auth_google_auth2_secret
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = get_secret("social_auth_google_auth2_key")
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = get_secret("social_auth_google_auth2_secret")
 
 
 SOCIAL_AUTH_PIPELINE = (
@@ -195,8 +199,8 @@ SOCIAL_AUTH_PIPELINE = (
 )
 
 
-RECAPTCHA_PUBLIC_KEY = recaptcha_site_key
-RECAPTCHA_PRIVATE_KEY = recaptcha_secret_key
+RECAPTCHA_PUBLIC_KEY = get_secret("recaptcha_site_key")
+RECAPTCHA_PRIVATE_KEY = get_secret("recaptcha_secret_key")
 NOCAPTCHA = True
 
 
